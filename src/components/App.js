@@ -4,6 +4,8 @@ import { Container } from "semantic-ui-react";
 import Header from "./Header";
 import AddContact from "./AddContact";
 import ContactList from "./ContactList";
+import uuid from 'react-uuid';
+
 
 function App() {
 
@@ -13,8 +15,18 @@ function App() {
 
   const addContactHandler = (contact) => {
     console.log(contact);
-    setContacts([...contacts, contact]);
+    setContacts([...contacts,{id : uuid(),...contact} ]);
   };
+
+  const removeContactHandler = (id) =>{
+
+    const newContactList = contacts.filter((contact)=>{
+      return contact.id !== id;
+    });
+
+    setContacts(newContactList);
+
+  }
 
   useEffect(()=>{
    const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
@@ -36,7 +48,7 @@ function App() {
       <Header />
       
         <AddContact addContactHandler={addContactHandler} />
-        <ContactList contacts={contacts} />
+        <ContactList contacts={contacts} getContactId = {removeContactHandler} />
       
     </div>
   );
